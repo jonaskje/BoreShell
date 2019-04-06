@@ -1,7 +1,5 @@
 
-param(
-	[string] $RootDir = $pwd.providerPath
-)
+[string]$RootDir = $PSScriptRoot
 
 $PSVersion = "6.2.0"
 $PsGalleryModules = "PowerLine", "PSEverything", "ClipboardText", "WindowsCompatibility", "Ships", "ThreadJob", "ImportExcel", "posh-git", "vim"
