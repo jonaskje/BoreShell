@@ -1,0 +1,7 @@
+BoreShell/*
+**/.vs/
+**/obj/
+**/bin
+packages/
+**/publish/*
+*.binlog
