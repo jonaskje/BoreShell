@@ -1,6 +1,6 @@
 Set-Variable -Name BoreShell -Value $true -Scope Global -Option Readonly
 
-# make BoreShell first in module path
+# make BoreShell the first in module path
 
 &{
 	$userPowerShell = split-path $PROFILE.CurrentUserAllHosts
@@ -26,7 +26,7 @@ foreach ($dir in "D:\", "C:\") {
 	}
 }
 
-Set-Alias gvim "$env:USERPROFILE\scoop\shims\gvim.exe"
+Set-Alias gvim "$env:USERPROFILE\scoop\shims\nvim-qt.exe"
 
 Import-Module posh-git
 Import-Module vim
