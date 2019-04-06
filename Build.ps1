@@ -1,10 +1,11 @@
 [string]$RootDir = $PSScriptRoot
-[DateTime]$TimeStamp = (Get-ChildItem $RootDir\Build.ps1").LastWriteTime
+[DateTime]$TimeStamp = (Get-ChildItem "$RootDir\Build.ps1").LastWriteTime
 [string]$BoreShellDir = "$RootDir\BoreShell"
 [string]$BoreShellExe = "$BoreShellDir\BoreShell.exe"
 
 function InstallScoopApplications() {
 	scoop bucket add shelmangroup https://github.com/shelmangroup/scoops
+	scoop bucket add extras
 	scoop install oidc-agent
 	scoop install extras/vcredist2015
 	scoop install extras/vcredist2017
@@ -21,7 +22,7 @@ function BuildBoreShell() {
 	$PsUri = "https://github.com/PowerShell/PowerShell/releases/download/v$PSVersion/PowerShell-$PSVersion-win-x64.zip"
 
 	if (Test-Path ($BoreShellExe)){
-		$BoreShellTimeStamp = (Get-ChildItem $BoreShellExe").LastWriteTime
+		$BoreShellTimeStamp = (Get-ChildItem $BoreShellExe).LastWriteTime
 		if ($BoreShellTimeStamp -ge $TimeStamp) {
 			Write-Host "Skipping BoreShell build because no changes were detected"
 			return
@@ -49,7 +50,8 @@ function BuildBoreShell() {
 
 	Copy-Item $PSScriptRoot\Extra\* -Recurse -Destination $BoreShellDir\
 
-	Move-Item $BoreShellDir\pwsh.exe $BoreShellDir\BoreShell.exe
+	Move-Item $BoreShellDir\pwsh.exe $BoreShellExe
+	(Get-ChildItem $BoreShellExe).LastWriteTime = Get-Date
 }
 
 & "$RootDir\Add-Font.ps1" -path "$RootDir\Extra\Fonts\"
@@ -57,7 +59,7 @@ InstallScoopApplications
 BuildBoreShell
 
 mkdir "$env:APPDATA\alacritty" -ErrorAction SilentlyContinue
-(get-content "$RootDir\appdata\alacritty\alacritty.yml") -Replace "@@@BORESHELL@@@",$BoreShellExe | Out-File -Force -Encoding utf8 -FilePath "$env:APPDATA\alacritty\alacritty.yml"
+(get-content "$RootDir\appdata\alacritty\alacritty.yml") -Replace "@@@BORESHELL@@@",$BoreShellExe | Out-File -Force -Encoding ascii -FilePath "$env:APPDATA\alacritty\alacritty.yml"
 
 cp -Force "$RootDir\scoop\persist\totalcommander\wincmd.ini" "$env:USERPROFILE\scoop\persist\totalcommander\wincmd.ini"
 
