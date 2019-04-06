@@ -52,11 +52,14 @@ function BuildBoreShell() {
 	Move-Item $BoreShellDir\pwsh.exe $BoreShellDir\BoreShell.exe
 }
 
+& "$RootDir\Add-Font.ps1" -path "$RootDir\Extra\Fonts\"
 InstallScoopApplications
 BuildBoreShell
 
 mkdir "$env:APPDATA\alacritty" -ErrorAction SilentlyContinue
 (get-content "$RootDir\appdata\alacritty\alacritty.yml") -Replace "@@@BORESHELL@@@",$BoreShellExe | Out-File -Force -Encoding utf8 -FilePath "$env:APPDATA\alacritty\alacritty.yml"
+
+cp -Force "$RootDir\scoop\persist\totalcommander\wincmd.ini" "$env:USERPROFILE\scoop\persist\totalcommander\wincmd.ini"
 
 # http://karuppuswamy.com/wordpress/2014/08/13/how-to-use-robocopy-in-windows-for-backup-and-sync-like-rsync-in-linux/
 # ROBOCOPY "$RootDir\.config" "$env:HOME\.config" /DCOPY:DA /MIR /FFT /Z /XA:SH /R:0 /TEE /XJD 
