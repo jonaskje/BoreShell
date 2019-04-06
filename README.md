@@ -1,0 +1,1 @@
+`iex (new-object net.webclient).downloadstring('https://raw.githubusercontent.com/jonaskje/BoreShell/master/Bootstrap.ps1')`
