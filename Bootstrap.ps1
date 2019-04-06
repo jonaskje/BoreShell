@@ -1,7 +1,7 @@
 
 # iex (new-object net.webclient).downloadstring('https://raw.githubusercontent.com/jonaskje/BoreShell/master/Bootstrap.ps1')
 
-function InstallScoopApplications() {
+function InstallScoop() {
 	if (Test-Path "$env:USERPROFILE\scoop\apps\scoop") {
 		scoop update
 	} else {
@@ -12,13 +12,13 @@ function InstallScoopApplications() {
 	scoop install git-with-openssh
 }
 
-$BoreHome = "$USERPROFILE\BoreShell"
-if (!(Test-Path $BoreHome)) {
-	InstallScoopApplications
+$BoreHome = "$env:USERPROFILE\BoreShell"
+if (Test-Path $BoreHome) {
+	Write-Warning "Skipping Boreshell install because $BoreHome already exists"
+} else {
+	InstallScoop
 	git clone https://github.com/jonaskje/BoreShell $BoreHome
 	cd $BoreHome
-	& "Build.ps1"
-} else {
-	Write-Warning "Skipping Boreshell install because $BoreHome already exists"
+	& "$BoreHome\Build.ps1"
 }
 
